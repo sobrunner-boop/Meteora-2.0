@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#164e63" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Meteora Order" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+  <title>Meteora Order v1.4.0 Final</title>
+</head>
+<body>
+  <header class="appHeader">
+    <div>
+      <p class="eyebrow">Restaurant Meteora</p>
+      <h1>Meteora Order</h1>
+      <p class="version">v1.4.0 Final</p>
+    </div>
+    <div class="headerActions"><span id="statusBadge" class="statusBadge">Offline bereit</span><button id="infoBtn" class="iconBtn" aria-label="Info">ℹ️</button></div>
+  </header>
+
+  <main>
+    <section id="tablesView" class="view active">
+      <div class="panel stickyControls">
+        <input id="tableSearch" placeholder="Tisch suchen" inputmode="numeric" />
+        <button id="customTableBtn">Andere</button>
+        <button id="openOnlyBtn" class="secondary">Besetzt</button>
+      </div>
+      <div id="tableList" class="tableList"></div>
+    </section>
+
+    <section id="orderView" class="view">
+      <button id="backBtn" class="backBtn">← Tische</button>
+      <div class="screenTitle">
+        <div>
+          <p class="eyebrow">Aktueller Tisch</p>
+          <h2 id="orderTitle">Tisch</h2>
+        </div>
+        <button id="guestBtn" class="secondary">Gäste: 0</button>
+      </div>
+
+      <div id="billBox" class="panel billBox"></div>
+      <div class="menuSearchRow"><input id="dishSearch" class="searchBig" placeholder="Gericht suchen: Nummer oder Name" /><button id="resetMenuFiltersBtn" class="secondary">Filter zurücksetzen</button></div>
+      <div id="categoryTabs" class="categoryTabs"></div>
+      <div id="menuList" class="menuList"></div>
+
+      <div class="bottomActions">
+        <button id="mergeTableBtn" class="secondary">Zusammenlegen</button>
+        <button id="splitTableBtn" class="secondary">Trennen</button>
+        <button id="undoLastBtn" class="secondary">Letzte zurück</button>
+        <button id="restoreLastBtn" class="secondary" disabled>Wiederherstellen</button>
+        <button id="clearTableBtn" class="danger">Tisch leeren</button>
+        <button id="billTableBtn" class="success">Rechnung</button>
+      </div>
+    </section>
+
+    <section id="historyView" class="view">
+      <div class="screenTitle">
+        <div><p class="eyebrow">Archiv</p><h2>Verlauf</h2></div>
+        <button id="exportCsvBtn">CSV</button>
+      </div>
+      <div class="panel historyFilters">
+        <input id="historyDate" type="date" aria-label="Datum filtern" />
+        <input id="historyTable" placeholder="Tisch" inputmode="numeric" />
+        <input id="historySearch" placeholder="Gericht oder Bemerkung suchen" />
+        <button id="todayHistoryBtn" class="secondary">Heute</button>
+        <button id="clearHistoryFiltersBtn" class="secondary">Filter löschen</button>
+      </div>
+      <div id="historyList"></div>
+    </section>
+
+    <section id="editorView" class="view">
+      <div class="screenTitle">
+        <div><p class="eyebrow">Speisekarte</p><h2>Editor</h2></div>
+        <button id="newDishBtn" class="success">+ Gericht</button>
+      </div>
+      <div class="panel editorControls">
+        <input id="editorSearch" placeholder="Gericht suchen" />
+        <input id="newCategoryInput" placeholder="Neue Kategorie" />
+        <button id="addCategoryBtn" class="secondary">Kategorie anlegen</button>
+      </div>
+      <div id="editorList" class="editorList"></div>
+    </section>
+
+    <section id="statsView" class="view">
+      <div class="screenTitle">
+        <div><p class="eyebrow">Auswertung</p><h2>Tagesstatistik</h2></div>
+        <button id="exportDailyCsvBtn">Tages-CSV</button>
+      </div>
+      <div id="statsSummary" class="statsGrid"></div>
+      <div id="statsDetails" class="panel statsDetails"></div>
+    </section>
+
+    <section id="settingsView" class="view">
+      <div class="screenTitle"><div><p class="eyebrow">System</p><h2>Einstellungen</h2></div></div>
+      <div class="panel settingsGrid">
+        <button id="backupBtn">Backup exportieren</button>
+        <button id="exportOpenTablesBtn" class="secondary">Offene Tische TXT</button>
+        <button id="exportDiagnosticsBtn" class="secondary">Systemprüfung TXT</button>
+        <button id="exportTestChecklistBtn" class="secondary">Praxistest TXT</button>
+        <button id="exportReadinessBtn" class="secondary">RC-Freigabe TXT</button>
+        <button id="exportShiftReportBtn" class="secondary">Schichtbericht TXT</button>
+        <button id="exportShiftReportCsvBtn" class="secondary">Schichtbericht CSV</button>
+        <button id="copyShiftReportBtn" class="secondary">Bericht kopieren</button>
+        <button id="previewShiftReportBtn" class="secondary">Bericht Vorschau</button>
+        <button id="installBtn" class="secondary">App installieren</button>
+        <button id="importBtn" class="secondary">Backup importieren</button>
+        <button id="resetDemoBtn" class="danger">Daten zurücksetzen</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden />
+      </div>
+      <div id="openOrderWarning" class="panel aboutBox">Daten werden geladen …</div>
+      <div id="systemHealthBox" class="panel aboutBox">Systemprüfung wird geladen …</div>
+      <div class="panel aboutBox">
+        <b>Meteora Order</b><br />Version 1.4.0 Final<br />Produktivversion<br />Restaurant Meteora © 2026<br />Letzte Speicherung: <span id="lastSavedText">—</span>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottomNav">
+    <button data-view="tablesView" class="active">🪑<span>Tische</span></button>
+    <button data-view="historyView">📚<span>Verlauf</span></button>
+    <button data-view="editorView">✏️<span>Editor</span></button>
+    <button data-view="statsView">📊<span>Statistik</span></button>
+    <button data-view="settingsView">⚙️<span>System</span></button>
+  </nav>
+
+  <dialog id="dishDialog">
+    <form method="dialog" id="dishForm" class="dialogCard">
+      <h2 id="dishTitle"></h2>
+      <p id="dishMeta"></p>
+      <label>Menge</label>
+      <div id="qtyPicker" class="qtyPicker"></div>
+      <label for="dishNote">Bemerkung</label>
+      <textarea id="dishNote" placeholder="z. B. ohne Zwiebeln"></textarea>
+      <div class="quickNotes">
+        <button type="button" data-note="ohne Zwiebeln">ohne Zwiebeln</button>
+        <button type="button" data-note="ohne Knoblauch">ohne Knoblauch</button>
+        <button type="button" data-note="extra scharf">extra scharf</button>
+        <button type="button" data-note="zum Mitnehmen">zum Mitnehmen</button>
+      </div>
+      <menu>
+        <button value="cancel" class="secondary">Abbrechen</button>
+        <button id="addDishBtn" value="default" class="success">Hinzufügen</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="billDialog">
+    <form method="dialog" class="dialogCard wideDialog">
+      <h2 id="billTitle">Rechnung</h2>
+      <div id="billPreview" class="billPreview"></div>
+      <menu class="billMenu">
+        <button value="cancel" class="secondary">Zurück</button>
+        <button id="exportBillBtn" value="default">TXT speichern</button>
+        <button id="printBillBtn" value="default" class="secondary">Drucken</button>
+        <button id="closeTableBtn" value="default" class="success">Tisch schließen</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="reportDialog">
+    <form method="dialog" class="dialogCard wideDialog">
+      <h2>Schichtbericht Vorschau</h2>
+      <p id="reportPreviewMeta" class="dialogHint">Bericht wird geladen …</p>
+      <div id="reportPreview" class="billPreview"></div>
+      <menu class="billMenu">
+        <button value="cancel" class="secondary">Schließen</button>
+        <button id="copyPreviewReportBtn" value="default" class="secondary">Kopieren</button>
+        <button id="savePreviewReportBtn" value="default">TXT speichern</button>
+        <button id="printPreviewReportBtn" value="default" class="secondary">Drucken</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="editorDialog">
+    <form method="dialog" id="editorForm" class="dialogCard">
+      <h2 id="editorTitle">Gericht bearbeiten</h2>
+      <label for="editNo">Nummer</label>
+      <input id="editNo" required />
+      <label for="editName">Name</label>
+      <input id="editName" required />
+      <label for="editCategory">Kategorie</label>
+      <input id="editCategory" required list="categoryList" />
+      <datalist id="categoryList"></datalist>
+      <label for="editPrice">Preis</label>
+      <input id="editPrice" required type="number" step="0.10" min="0" inputmode="decimal" />
+      <label class="checkRow"><input id="editAvailable" type="checkbox" /> Verfügbar</label>
+      <menu class="editorMenu">
+        <button value="cancel" class="secondary">Abbrechen</button>
+        <button id="deleteDishBtn" value="default" class="danger">Löschen</button>
+        <button id="saveDishBtn" value="default" class="success">Speichern</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <div id="toast"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
